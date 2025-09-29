@@ -1,13 +1,9 @@
-import express, { Request, Response, Express } from "express";
+import { Express } from "express";
 
-const router = express.Router();
+import taskRoutes from "./task.routes";
 
 const routes = (server: Express) => {
-  server.use("/core/", router);
+  server.use("/task", taskRoutes);
 };
-
-router.get("", (req: Request, res: Response) => {
-  return res.status(200).json({ data: "" });
-});
 
 export default routes;
