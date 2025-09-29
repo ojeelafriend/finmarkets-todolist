@@ -21,16 +21,3 @@ export const validateCreatedTask = [
     validateResult(req, res, next);
   },
 ];
-
-export const validateUpdatedTaskStatus = [
-  check("status")
-    .exists()
-    .notEmpty()
-    .isString()
-    .isIn(["pending", "completed"])
-    .withMessage("Se requiere un estado válido"),
-
-  (req: Request, res: Response, next: NextFunction) => {
-    validateResult(req, res, next);
-  },
-];
