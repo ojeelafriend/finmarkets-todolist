@@ -8,42 +8,25 @@ export class SQLiteTaskRepository implements TaskRepository {
   private repository: Repository<Task> = AppDataSource.getRepository("tasks");
 
   async findAll(): Promise<Task[]> {
-    // const tasks = await this.repository.find();
-
-    // return tasks.map((task) => ({
-    //   id: task.id.toString(),
-    //   title: task.title,
-    //   description: task.description,
-    //   status: task.status,
-    //   createdAt: task.createdAt,
-    //   updatedAt: task.updatedAt,
-    // }));
-    return [];
+    return await this.repository.find();
   }
+
   async findById({ id }: { id: string }): Promise<Task> {
-    // const taskEntity = await this.repository.findOne({
-    //   where: { id: parseInt(id) },
-    // });
+    const taskEntity = await this.repository.findOne({
+      where: { id },
+    });
 
-    // if (!taskEntity) {
-    //   throw new Error("Task not found");
-    // }
+    if (!taskEntity) {
+      throw new Error("Task not found");
+    }
 
-    // return {
-    //   id: taskEntity.id.toString(),
-    //   title: taskEntity.title,
-    //   description: taskEntity.description,
-    //   status: taskEntity.status,
-    //   createdAt: taskEntity.createdAt,
-    //   updatedAt: taskEntity.updatedAt,
-    // };
     return {
-      id: "",
-      title: "",
-      description: "",
-      status: TaskStatus.PENDING,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      id: taskEntity.id,
+      title: taskEntity.title,
+      description: taskEntity.description,
+      status: taskEntity.status,
+      createdAt: taskEntity.createdAt,
+      updatedAt: taskEntity.updatedAt,
     };
   }
 
@@ -52,17 +35,27 @@ export class SQLiteTaskRepository implements TaskRepository {
     return taskSaved;
   }
 
-  async updateStatusById({ id }: { id: string }): Promise<void> {
-    // const taskEntity = await this.repository.findOne({
-    //   where: { id: parseInt(id) },
-    // });
-    // if (!taskEntity) {
-    //   throw new Error("Task not found");
-    // }
-    // taskEntity.status = TaskStatus.COMPLETED;
-    // await this.repository.save(taskEntity);
+  async updateStatusById({
+    id,
+  }: {
+    id: string;
+  }): Promise<{ id: string; status: TaskStatus }> {
+    const taskEntity = await this.repository.findOne({ where: { id } });
+
+    if (!taskEntity) {
+      throw new Error("Task not found");
+    }
+
+    taskEntity.status =
+      taskEntity.status === TaskStatus.PENDING
+        ? TaskStatus.COMPLETED
+        : TaskStatus.PENDING;
+
+    const taskSaved = await this.repository.save(taskEntity);
+
+    return { id: taskSaved?.id?.toString() || "", status: taskSaved.status };
   }
   async deleteById({ id }: { id: string }): Promise<void> {
-    await this.repository.delete(parseInt(id));
+    await this.repository.delete({ id });
   }
 }
