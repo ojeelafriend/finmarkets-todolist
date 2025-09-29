@@ -1,16 +1,34 @@
-import { App } from "./http/express";
+import "reflect-metadata";
+import { createServer, Server } from "http";
+import { Server as SocketServer } from "socket.io";
+
+import app from "./express";
 import routes from "./routes/index.routes";
+import { AppDataSource } from "../Tasks/framework/Database/TypeORM/config";
 
-import database from "../Contexts/Shared/framework/database";
+const PORT = process.env.PORT || 3030;
 
-routes(App);
+const httpServer = createServer(app);
 
-App.listen(process.env.PORT_SERVER || 3030, async () => {
-  console.log(`🤖 Mode: ${process.env.NODE_ENV}`);
-  console.log(
-    `🚀 Server is running on ${process.env.SERVER_NAME || "http://localhost"}:${
-      process.env.PORT_SERVER || 3030
-    }`
-  );
-  await database.run();
+const io = new SocketServer(httpServer, {
+  cors: { origin: process.env.CLIENT_URL || "*" },
 });
+
+io.on("connection", (socket) => {
+  console.log("a user connected");
+});
+
+routes(app);
+
+httpServer.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT} 🚀`);
+  AppDataSource.initialize()
+    .then(() => {
+      console.log("Database connected 🚀");
+    })
+    .catch((error) => {
+      console.log("Error connecting to database 🚨", error);
+    });
+});
+
+export { io };
