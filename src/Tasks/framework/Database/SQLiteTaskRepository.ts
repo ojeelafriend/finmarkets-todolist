@@ -56,6 +56,12 @@ export class SQLiteTaskRepository implements TaskRepository {
     return { id: taskSaved?.id?.toString() || "", status: taskSaved.status };
   }
   async deleteById({ id }: { id: string }): Promise<void> {
+    const taskEntity = await this.repository.findOne({ where: { id } });
+
+    if (!taskEntity) {
+      throw new Error("Task not found");
+    }
+
     await this.repository.delete({ id });
   }
 }
