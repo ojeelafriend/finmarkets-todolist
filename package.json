@@ -8,7 +8,8 @@
     "dev": "tsc && cross-env NODE_ENV=development nodemon ./dist/Api/server.js",
     "spec": "tsc --watch",
     "typescript": "tsc --init",
-    "test": "cross-env NODE_ENV=test jest"
+    "test": "cross-env NODE_ENV=test jest",
+    "test:watch": "cross-env NODE_ENV=test jest --watch"
   },
   "keywords": [
     "github template",
