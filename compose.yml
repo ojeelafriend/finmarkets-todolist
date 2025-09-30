@@ -3,7 +3,7 @@ services:
     build: .
     container_name: finmarkets-api
     ports:
-      - "3030:3030"
+      - "3142:3030"
     environment:
       - NODE_ENV=${NODE_ENV}
       - PORT=3030
