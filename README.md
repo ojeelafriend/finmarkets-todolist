@@ -1,21 +1,24 @@
-# FinMarkets Interview - Task Management API
+# Finmarkets Interview Challenge: ☑️ TODO List
 
 API REST para gestión de tareas desarrollada con TypeScript, Node.js y arquitectura hexagonal. Permite crear, actualizar, eliminar y consultar tareas con comunicación en tiempo real a través de WebSockets.
 
-## Comenzando 🚀
+## Consideraciones 🚀
+Apliqué unas cuantas prácticas vinculadas a Clean Architectures, DDD, Ports and Adapters, SOLID: con el fin de mostrar algunas de mis habilidades para encaminar proyectos que pueden escalar y a su vez, mostrar la facilidad de testear este tipo de arquitecturas. En cuanto a las tecnologías elegí las más fáciles para empezar y llegar a un MVP lo más rápido posible en un día. Tampoco desarrollé la logica de negocio estrictamente en el dominio (Anemic Domain Model) por lo que tiene algunos aspectos que deben mejorar.
 
-Estas instrucciones te permitirán obtener una copia del proyecto en funcionamiento en tu máquina local para propósitos de desarrollo y pruebas.
+Por otro lado, respecto a las funcionalidades, estas se encuentran 100% cubiertas hasta las opcionales.
 
-Mira [Despliegue](#despliegue-) para conocer como desplegar el proyecto.
+El challenge se encuentra deployado en https://todo.odev.lat ✈️
+
+> Si se busca probar en local, la opción más recomendada levantar con docker compose y abrir el index.html de /client
+
+[Click aquí para ver documentación en postman](https://documenter.getpostman.com/view/16890532/2sB3QFQsNH)
 
 ## Pre-requisitos 📋
 
-Que cosas necesitas para instalar el software y como instalarlas:
-
-- **Node.js** (versión 16 o superior)
+- **Node.js** (versión 20 o superior)
 - **npm** (incluido con Node.js)
 
-### Da un ejemplo:
+### Asegura esto:
 
 ```bash
 # Verificar versiones
@@ -25,24 +28,20 @@ npm --version
 
 ## Instalación 🔧
 
-Una serie de ejemplos paso a paso que te dice lo que debes ejecutar para tener un entorno de desarrollo ejecutándose:
-
-### Dí cómo será ese paso:
-
-#### Paso 1: Clonar el repositorio
+#### Clonar el repositorio
 
 ```bash
 git clone <url-del-repositorio>
-cd finmarkets-interview
+cd finmarkets-todolist
 ```
 
-#### Paso 2: Instalar dependencias
+#### Instalar dependencias
 
 ```bash
 npm install
 ```
 
-#### Paso 3: Configurar variables de entorno
+#### Configurar variables de entorno
 
 Crear archivo `.env` en la raíz del proyecto:
 
@@ -50,121 +49,56 @@ Crear archivo `.env` en la raíz del proyecto:
 touch .env
 ```
 
-Agregar las siguientes variables:
+Environments:
 
 ```env
-NODE_ENV=development
-PORT=3030
-CLIENT_URL=http://localhost:3000
+NODE_ENV
+PORT
+CLIENT_URL
 ```
 
-#### Paso 4: Ejecutar en modo desarrollo
+#### Ejecutar en modo desarrollo
 
 ```bash
+# Watch de typescript
+npm run spec
+
+# Iniciar con nodemon
 npm run dev
 ```
 
-### Da un ejemplo:
-
-```bash
-# El servidor estará disponible en http://localhost:3030
-# Puedes probar los endpoints con:
-curl http://localhost:3030/api/tasks
-```
-
-### Y repite hasta finalizar:
-
-Finaliza con un ejemplo de cómo obtener datos del sistema o como usarlos para una pequeña demo:
-
-```bash
-# Crear una nueva tarea
-curl -X POST http://localhost:3030/api/tasks \
-  -H "Content-Type: application/json" \
-  -d '{"title": "Mi primera tarea", "description": "Descripción de la tarea"}'
-
-# Listar todas las tareas
-curl http://localhost:3030/api/tasks
-```
-
-## Ejecutando las pruebas ⚙️
-
-Explica como ejecutar las pruebas automatizadas para este sistema:
+## Ejecutar pruebas integradas y unitarias ⚙️
 
 ```bash
 # Ejecutar todas las pruebas
-npm test
+npm run test
 
 # Ejecutar pruebas en modo watch
 npm run test:watch
 ```
-
-## Analice las pruebas end-to-end 🔩
-
-Explica que verifican estas pruebas y por qué:
-
-Las pruebas end-to-end verifican el flujo completo de la API, desde la recepción de peticiones HTTP hasta la persistencia en base de datos y la comunicación en tiempo real via WebSockets.
-
-### Da un ejemplo:
-
-```javascript
-// Verifica que se pueda crear una tarea y recibir actualizaciones en tiempo real
-describe("Task Creation E2E", () => {
-  it("should create task and emit socket event", async () => {
-    const response = await request(app)
-      .post("/api/tasks")
-      .send({ title: "Test Task", description: "Test Description" });
-
-    expect(response.status).toBe(201);
-    expect(response.body).toHaveProperty("id");
-  });
-});
-```
-
-## Y las pruebas de estilo de codificación ⌨️
-
-Explica que verifican estas pruebas y por qué:
-
-Las pruebas de estilo verifican que el código cumpla con las convenciones de TypeScript y las mejores prácticas de la arquitectura hexagonal implementada.
-
-### Da un ejemplo:
+## Despliegue
+### Despliega con Docker compose 📦
 
 ```bash
-# Verificar tipos de TypeScript
-npm run typescript
-
-# Compilar sin errores
-tsc --noEmit
+docker compose up
 ```
 
-## Despliegue 📦
-
-Agrega notas adicionales sobre como hacer deploy:
-
-### Docker
+### Asegura que funcione
 
 ```bash
-# Construir imagen
-docker build -t finmarkets-api .
+curl http://localhost:3030/health
 
-# Ejecutar contenedor
-docker-compose up
-```
-
-### Producción
-
-```bash
-npm run start
+{ok: true, message: "Server is running"}
 ```
 
 ## Construido con 🛠️
 
-Menciona las herramientas que utilizaste para crear tu proyecto:
-
-- **Node.js** - El runtime de JavaScript usado
-- **TypeScript** - Superset tipado de JavaScript
-- **Express** - El framework web usado
-- **TypeORM** - ORM para manejo de base de datos
-- **SQLite** - Base de datos embebida
-- **Socket.io** - Usado para comunicación en tiempo real
-- **Jest** - Framework de testing
-- **Mongoose** - ODM para MongoDB
+- **Node.js** 
+- **TypeScript**
+- **Express**
+- **TypeORM**
+- **SQLite**
+- **Socket.io**
+- **Jest**
+- **Docker**
+- **AWS EC2**
