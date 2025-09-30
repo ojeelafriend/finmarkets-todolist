@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Finmarkets Interview</title>
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="icon" href="https://www.finmarkets.cl/images/logo-dark.svg" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <h1 class="title">TO-DO List</h1>
+        <p class="subtitle">Prueba técnica Finmarkets</p>
+      </header>
+
+      <main class="main">
+        <form class="todo-form" id="todoForm">
+          <input
+            class="todo-input"
+            id="todoTitle"
+            type="text"
+            name="title"
+            placeholder="Task title (required)"
+            autocomplete="off"
+            required
+            maxlength="100"
+          />
+          <button class="btn btn-primary" type="submit" aria-label="Add task">
+            Agregar tarea
+          </button>
+          <textarea
+            class="todo-input todo-textarea"
+            id="todoDescription"
+            name="description"
+            placeholder="Description (optional)"
+            maxlength="500"
+            rows="3"
+          ></textarea>
+        </form>
+
+        <ul class="todo-list" id="todoList" aria-live="polite"></ul>
+      </main>
+
+      <footer class="footer">
+        <small class="hint"
+          >Presiona agregar tarea. Click ✓ para completar, × para
+          eliminar.</small
+        >
+      </footer>
+    </div>
+
+    <!-- script: SOCKET.IO CDN and MANAGE TASK EVENTS -->
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script>
+      const API_URL = "http://localhost:3030";
+      const SOCKET_URL = "ws://localhost:3030";
+
+      function createTodoItem(title, description, id, status) {
+        return `<li class="todo-item ${
+          status === "completed" ? "is-completed" : ""
+        }" id="${id}">
+          <button class="btn btn-check" type="button" aria-label="Mark as done" id="completed-${id}" onclick="onClickCompleted(${id})">✓</button>
+          <div class="todo-content">
+            <span class="todo-text">${title}</span>
+            ${
+              description
+                ? `<span class="todo-description">${description}</span>`
+                : ""
+            }
+          </div>
+          <button class="btn btn-remove" type="button" aria-label="Delete task" id="delete-${id}" onclick="onClickDelete(${id})">×</button>
+        </li>`;
+      }
+
+      const list = document.getElementById("todoList");
+      const form = document.getElementById("todoForm");
+
+      const titleInput = document.getElementById("todoTitle");
+      const descriptionInput = document.getElementById("todoDescription");
+
+      const deleteButtonArray = document.querySelectorAll(".btn-remove");
+      const completedButtonArray = document.querySelectorAll(".btn-check");
+
+      const socket = io(SOCKET_URL);
+
+      //socket event connect get all tasks
+      socket.on("connect", async () => {
+        try {
+          const response = await fetch(`${API_URL}/task`);
+          const result = await response.json();
+          if (!result.ok) {
+            alert(result.error);
+            return;
+          }
+          const tasks = result.tasks;
+          tasks.forEach((task) => {
+            const item = createTodoItem(
+              task.title,
+              task.description,
+              task.id,
+              task.status
+            );
+            list.insertAdjacentHTML("beforeend", item);
+          });
+        } catch (error) {
+          console.error("Error getting tasks:", error);
+        }
+      });
+
+      //button event create new task
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const newTitle = titleInput.value.slice(0, 100);
+        const newDescription = descriptionInput.value.slice(0, 500);
+
+        if (!newTitle) return;
+
+        try {
+          const response = await fetch(`${API_URL}/task`, {
+            method: "POST",
+            body: JSON.stringify({
+              title: newTitle,
+              description: newDescription,
+            }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          const result = await response.json();
+
+          if (!result.ok) {
+            alert(result.error);
+            return;
+          }
+
+          titleInput.value = "";
+          descriptionInput.value = "";
+          titleInput.focus();
+        } catch (error) {
+          console.error("Error creating task:", error);
+        }
+      });
+
+      //socket event taskCreated
+      socket.on("taskCreated", (data) => {
+        const item = createTodoItem(
+          data.title,
+          data.description,
+          data.id,
+          data.status
+        );
+        list.insertAdjacentHTML("beforeend", item);
+      });
+
+      //socket event taskUpdated
+      socket.on("taskUpdated", (data) => {
+        console.log(data);
+        if (data.status === "completed") {
+          const markAsDone = document.getElementById(`${data.id}`);
+          markAsDone.classList.add("is-completed");
+        }
+        if (data.status === "pending") {
+          const markAsDone = document.getElementById(`${data.id}`);
+          markAsDone.classList.remove("is-completed");
+        }
+      });
+
+      //socket event taskDeleted
+      socket.on("taskDeleted", (data) => {
+        const item = document.getElementById(`${data.id}`);
+        item.remove();
+      });
+
+      //button event completed
+      const onClickCompleted = async (id) => {
+        const response = await fetch(`${API_URL}/task/${id}`, {
+          method: "PATCH",
+        });
+        const result = await response.json();
+        if (!result.ok) {
+          alert(result.error);
+          return;
+        }
+      };
+
+      //button event delete
+      const onClickDelete = async (id) => {
+        const response = await fetch(`${API_URL}/task/${id}`, {
+          method: "DELETE",
+        });
+        const result = await response.json();
+        if (!result.ok) {
+          alert(result.error);
+          return;
+        }
+      };
+    </script>
+
+    <!-- script: GUEST TRACKED TOOLS -->
+    <script></script>
+  </body>
+</html>
