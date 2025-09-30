@@ -4,7 +4,7 @@
   "description": "Template para proyectos nodejs con typescript, utilizando DDD y Hexagonal",
   "main": "server.js",
   "scripts": {
-    "start": "tsc && cross-env NODE_ENV=production node ./dist/Api/server.js",
+    "start": "cross-env NODE_ENV=production node ./dist/Api/server.js",
     "dev": "tsc && cross-env NODE_ENV=development nodemon ./dist/Api/server.js",
     "spec": "tsc --watch",
     "typescript": "tsc --init",
@@ -18,7 +18,7 @@
     "Hexagonal Architecture"
   ],
   "author": "Alejo R. Solis",
-  "license": "",
+  "license": "MIT",
   "devDependencies": {
     "@types/cookie": "^0.6.0",
     "@types/express": "^4.17.23",
@@ -26,8 +26,8 @@
     "@types/morgan": "^1.9.9",
     "@types/node": "^24.6.0",
     "@types/uuid": "^10.0.0",
-    "cross-env": "^7.0.3",
-    "dotenv": "^16.4.5",
+    "@types/cors": "^2.8.17",
+    "@types/jsonwebtoken": "^9.0.6",
     "jest": "^29.7.0",
     "nodemon": "^3.1.0",
     "ts-jest": "^29.1.2",
@@ -35,8 +35,8 @@
     "typescript": "^5.9.2"
   },
   "dependencies": {
-    "@types/cors": "^2.8.17",
-    "@types/jsonwebtoken": "^9.0.6",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.5",
     "cookie": "^0.6.0",
     "cors": "^2.8.5",
     "express": "^4.21.2",
