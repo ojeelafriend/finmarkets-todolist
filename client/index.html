@@ -82,7 +82,7 @@
       const deleteButtonArray = document.querySelectorAll(".btn-remove");
       const completedButtonArray = document.querySelectorAll(".btn-check");
 
-      const socket = io(SOCKET_URL, { path: "/api/socket.io" });
+      const socket = io(SOCKET_URL);
 
       //socket event connect get all tasks
       socket.on("connect", async () => {

@@ -11,6 +11,7 @@ const httpServer = createServer(app);
 
 const io = new SocketServer(httpServer, {
   cors: { origin: process.env.CLIENT_URL || "*" },
+  path: "/api/socket.io",
 });
 
 io.on("connection", (socket) => {
