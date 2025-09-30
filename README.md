@@ -2,16 +2,16 @@
 
 API REST para gestión de tareas desarrollada con TypeScript, Node.js y arquitectura hexagonal. Permite crear, actualizar, eliminar y consultar tareas con comunicación en tiempo real a través de WebSockets.
 
-## Consideraciones 🚀
-Apliqué unas cuantas prácticas vinculadas a Clean Architectures, DDD, Ports and Adapters, SOLID: con el fin de mostrar algunas de mis habilidades para encaminar proyectos que pueden escalar y a su vez, mostrar la facilidad de testear este tipo de arquitecturas. En cuanto a las tecnologías elegí las más fáciles para empezar y llegar a un MVP lo más rápido posible en un día. Tampoco desarrollé la logica de negocio estrictamente en el dominio (Anemic Domain Model) por lo que tiene algunos aspectos que deben mejorar.
-
-Por otro lado, respecto a las funcionalidades, estas se encuentran 100% cubiertas hasta las opcionales.
-
 El challenge se encuentra deployado en https://todo.odev.lat ✈️
 
 > Si se busca probar en local, la opción más recomendada levantar con docker compose y abrir el index.html de /client
 
 [Click aquí para ver documentación en postman](https://documenter.getpostman.com/view/16890532/2sB3QFQsNH)
+
+## Consideraciones 🚀
+Apliqué unas cuantas prácticas vinculadas a Clean Architectures, DDD, Ports and Adapters, SOLID: con el fin de mostrar algunas de mis habilidades para encaminar proyectos que pueden escalar y a su vez, mostrar la facilidad de testear este tipo de arquitecturas. En cuanto a las tecnologías elegí las más fáciles para empezar y llegar a un MVP lo más rápido posible en un día. Tampoco desarrollé la logica de negocio estrictamente en el dominio (Anemic Domain Model) por lo que tiene algunos aspectos que deben mejorar.
+
+Por otro lado, respecto a las funcionalidades, estas se encuentran 100% cubiertas hasta las opcionales.
 
 ## Pre-requisitos 📋
 
