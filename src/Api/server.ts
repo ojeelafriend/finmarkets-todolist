@@ -1,5 +1,4 @@
-import "reflect-metadata";
-import { createServer, Server } from "http";
+import { createServer } from "http";
 import { Server as SocketServer } from "socket.io";
 
 import app from "./express";
@@ -15,7 +14,7 @@ const io = new SocketServer(httpServer, {
 });
 
 io.on("connection", (socket) => {
-  console.log("a user connected");
+  console.log("a user connected", socket.id);
 });
 
 routes(app);
