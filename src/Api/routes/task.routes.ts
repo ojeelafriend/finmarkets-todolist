@@ -32,7 +32,7 @@ router.post(
       if (error) {
         console.log("[Error CREATE TASK]: ", error);
 
-        return response.status(400).json({
+        return response.status(500).json({
           ok: false,
           error: `Error al crear la tarea, intente mas tarde`,
         });
@@ -43,7 +43,9 @@ router.post(
       return response.status(201).json({ ok: true, task });
     } catch (error) {
       console.log(error);
-      response.status(500).json({ ok: false, error: "Internal server error" });
+      response
+        .status(500)
+        .json({ ok: false, error: "Error al crear la tarea" });
     }
   }
 );
@@ -55,7 +57,7 @@ router.patch("/:id", async (request: Request, response: Response) => {
     const { taskUpdatedInfo, error } = await updater.execute({ id });
 
     if (error) {
-      return response.status(400).json({
+      return response.status(404).json({
         ok: false,
         error,
       });
@@ -94,7 +96,7 @@ router.get("/:id", async (request: Request, response: Response) => {
     const { task, error } = await finderById.execute({ id });
 
     if (error) {
-      return response.status(400).json({ ok: false, error });
+      return response.status(404).json({ ok: false, error });
     }
 
     return response.status(200).json({ ok: true, task });
@@ -111,7 +113,7 @@ router.delete("/:id", async (request: Request, response: Response) => {
     const { taskDeletedInfo, error } = await deleter.execute({ id });
 
     if (error) {
-      return response.status(400).json({ ok: false, error });
+      return response.status(404).json({ ok: false, error });
     }
 
     io.emit("taskDeleted", taskDeletedInfo);
