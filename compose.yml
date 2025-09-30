@@ -1,0 +1,14 @@
+services:
+  api:
+    build: .
+    container_name: finmarkets-api
+    ports:
+      - "3030:3030"
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - PORT=3030
+      - CLIENT_URL=${CLIENT_URL}
+    volumes:
+      - ./data:/app/data
+      - ./tasks.sqlite:/app/tasks.sqlite
+    restart: unless-stopped
