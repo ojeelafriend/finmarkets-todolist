@@ -10,5 +10,4 @@ services:
       - CLIENT_URL=${CLIENT_URL}
     volumes:
       - ./data:/app/data
-      - ./tasks.sqlite:/app/tasks.sqlite
     restart: unless-stopped

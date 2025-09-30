@@ -4,7 +4,7 @@ import { Task } from "./TaskEntity";
 
 export const AppDataSource = new DataSource({
   type: "sqlite",
-  database: "tasks.sqlite",
+  database: "data/tasks.sqlite",
   entities: [Task],
   synchronize: true,
   logging: false,
